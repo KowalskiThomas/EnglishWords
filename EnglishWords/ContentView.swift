@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var navigationTitleForHomeScreen = "Hello"
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            LearningPage()
+                .navigationTitle($navigationTitleForHomeScreen)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink(destination: {
+                            SettingsPage()
+                        }) {
+                            Text("Settings")
+                        }
+                    }
+                }
         }
-        .padding()
     }
 }
 
