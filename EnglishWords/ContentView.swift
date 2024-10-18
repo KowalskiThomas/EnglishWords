@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var navigationTitleForHomeScreen = "Hello"
+    var store: WordsStore
+    var words: WordsManager
+    var learningManager: LearningManager
     
     var body: some View {
         NavigationStack {
-            LearningPage()
-                .navigationTitle($navigationTitleForHomeScreen)
+            LearningPage(store: store, manager: learningManager)
+                .navigationTitle("Hello")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink(destination: {
-                            SettingsPage()
+                            SettingsPage(store: store)
                         }) {
                             Text("Settings")
                         }
@@ -28,5 +30,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    let store = WordsStore()
+    ContentView(
+        store: store,
+        words: WordsManager.instance(wordsStore: store),
+        learningManager: LearningManager(store: store)
+    )
 }

@@ -34,35 +34,42 @@ extension StatisticsItem {
 }
 
 struct SettingsPage: View {
-    @State var useRandomOrder: Bool = false
-    @State var fieldContents: String = ""
-    @State var countWordsInPool = 10
+    @StateObject var store: WordsStore
     
     var wordsInApp: Int {
-        return WordsManager.instance().loadFile().count
+        return WordsManager.instance().allWords.count
     }
     
     var body: some View {
         Form {
             Section("Learning") {
-                Stepper(value: $countWordsInPool) {
-                    Text("Words in pool: \(countWordsInPool)")
+                Stepper(value: $store.numberOfWordsInPool, in: 1...1000000) {
+                    Text("Words in pool: \(store.numberOfWordsInPool)")
                 }
-                Toggle(isOn: $useRandomOrder) {
+                Toggle(isOn: $store.useRandomOrder) {
                     Text("Randomly pick next word")
                 }
             }
             Section("User data") {
                 NavigationLink(destination: {
-                    Text("TODO")
+                    List {
+                        ForEach(store.knownWords, id: \.self) { w in
+                            Text(w)
+                        }
+                    }
                         .navigationTitle("Words learnt")
                 }) {
                     Text("See all words learnt so far")
+                } 
+                NavigationLink(destination: {
+                    CustomWordsView(store: store)
+                }) {
+                    Text("Manage custom words")
                 }
             }
             Section("Statistics") {
                 StatisticsItem("Words in app", wordsInApp)
-                StatisticsItem("Words learnt", 1234)
+                StatisticsItem("Words learnt", store.knownWords.count)
             }
         }
         .navigationTitle("Settings")
@@ -71,6 +78,6 @@ struct SettingsPage: View {
 
 #Preview {
     NavigationStack {
-        SettingsPage()
+        SettingsPage(store: SampleWordsStore())
     }
 }

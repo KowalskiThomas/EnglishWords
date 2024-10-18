@@ -83,7 +83,7 @@ struct WordCard: View {
     
     var currentWordTranslation: String {
         if !notSure {
-            return "qsd"
+            return "..."
         }
         
         return manager.currentWordTranslation
@@ -91,7 +91,8 @@ struct WordCard: View {
 }
 
 struct LearningPage: View {
-    @StateObject var manager = LearningManager()
+    @ObservedObject var store: WordsStore
+    @ObservedObject var manager: LearningManager
     
     var body: some View {
         VStack {
@@ -102,5 +103,6 @@ struct LearningPage: View {
 }
 
 #Preview {
-    LearningPage()
+    let store = SampleWordsStore()
+    LearningPage(store: store, manager: LearningManager(store: store))
 }

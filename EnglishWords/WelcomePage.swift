@@ -8,10 +8,16 @@
 import SwiftUI
 
 struct WelcomePage: View {
+    @ObservedObject var store: WordsStore
+    
     var body: some View {
+        /*
         VStack {
             NavigationLink(destination: {
-                LearningPage()
+                LearningPage(
+                    store: store,
+                    manager: LearningManager(store: store)
+                )
             }) {
                 Text("Learn now")
             }
@@ -24,9 +30,11 @@ struct WelcomePage: View {
             }
             .buttonStyle(.borderedProminent)
         }
+         */
+        Text("NOT USED")
     }
 }
 
 #Preview {
-    WelcomePage()
+    WelcomePage(store: SampleWordsStore())
 }
